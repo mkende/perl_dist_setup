@@ -13,8 +13,8 @@ WriteMakefile(
     VERSION_FROM     => '[% base_package %]',
     [% IF abstract %]ABSTRACT         => q{[% abstract %]},[% END %]
     LICENSE          => 'mit',
-    [% IF exe_files %]EXE_FILES        => [[% FOREACH f in exe_files %] '[% f %]', [% END %]],[% END %]
-    MIN_PERL_VERSION => '5.024',
+    [% IF exe_files %]EXE_FILES        => [[% FOREACH f IN exe_files %]'[% f %]',[% END %]],[% END %]
+    MIN_PERL_VERSION => '5.026',
     MAN3PODS         => {},
     # Directories in which we look for Makefile.PL. In general could be omitted but is needed in case there
     # is a file named Makefile.PL in a sub-directory. Should be customized if such a file needs to be

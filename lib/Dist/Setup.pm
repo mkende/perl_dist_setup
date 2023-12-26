@@ -37,7 +37,7 @@ sub setup {
   my $eval = Eval::Safe->new();
   $conf = $eval-> do($conf_file) or die "Cannot parse the ${conf_file_name} configuration: $@";
 
-  $conf->{auto}{date}{year} = '2024';
+  $conf->{auto}{date}{year} = (localtime)[5] + 1900 ;
   $conf->{dist_name} //= $conf->{name} =~ s/::/-/gr;
   $conf->{base_package} //= 'lib/'. ($conf->{name} =~ s{::}{/}gr) .'.pm';
   $conf->{footer_marker} = $footer_marker;

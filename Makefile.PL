@@ -1,27 +1,27 @@
+# DO NOT EDIT! This file is written by perl_setup_dist.
+# If needed, you can add content at the end of the file.
 use 5.026;
 use strict;
 use warnings;
-use ExtUtils::MakeMaker;
+use ExtUtils::MakeMaker::CPANfile;
 use File::ShareDir::Install;
 
 install_share 'data';
 
 WriteMakefile(
     NAME             => 'Dist::Setup',
-    DIR              => [],  # Directories in which we look for Makefile.PL. Need to be specified so that "data" is ignored.
+    DISTNAME         => 'Dist-Setup',
     AUTHOR           => q{Mathias Kende <mathias@cpan.org>},
     VERSION_FROM     => 'lib/Dist/Setup.pm',
-    ABSTRACT         => 'Simple tool to setup a distribution directory.',
+    ABSTRACT         => q{Simple opinionated tool to setup a Perl distribution directory.},
     LICENSE          => 'mit',
-    EXE_FILES        => ['script/perl_dist_setup'],
+    EXE_FILES        => ['script/perl_dist_setup',],
     MIN_PERL_VERSION => '5.026',
     MAN3PODS         => {},
-    CONFIGURE_REQUIRES => {
-        'ExtUtils::MakeMaker'     => '0',
-        'Eval::Safe'              => '0',
-        'File::ShareDir'          => '0',
-        'Template'                => '0',
-    },
+    # Directories in which we look for Makefile.PL. In general could be omitted but is needed in case there
+    # is a file named Makefile.PL in a sub-directory. Should be customized if such a file needs to be
+    # processed by ExtUtils.
+    DIR              => [],
     NO_MYMETA => 1,
     META_MERGE => {
       'meta-spec' => { version => 2 },
@@ -47,3 +47,5 @@ WriteMakefile(
 
 package MY;
 use File::ShareDir::Install qw(postamble);
+# End of the template. You can add custom content below this line.
+
