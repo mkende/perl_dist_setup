@@ -1,0 +1,16 @@
+^.aspelldict$
+^.git/
+^.gitmodules$
+^.gitignore$
+^.perlcriticrc$
+^.perltidyrc$
+^Makefile$
+^MANIFEST\.bak$
+^MANIFEST\.skip$
+^blib/
+^cpanfile.snapshot$
+^dist_setup.conf$
+^local/
+^pm_to_blib$
+^[% dist_name %]\.tar\.gz
+^[% dist_name %]/
