@@ -100,7 +100,8 @@ sub setup_file {
     }
   }
 
-  $dest_tt->process($src_file, { %$conf, footer_content => $footer }, $target_file);
+  $dest_tt->process($src_file, { %$conf, footer_content => $footer }, $target_file)
+    or die "Cannot process template ${src_file}: ".$dest_tt->error()."\n";
 }
 
 1;

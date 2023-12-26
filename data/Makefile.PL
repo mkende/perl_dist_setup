@@ -2,21 +2,18 @@ use 5.026;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker::CPANfile;
+[% IF data_dir %]use File::ShareDir::Install;
 
-[% IF data_dir %]
-use File::ShareDir::Install;
-
-install_share '[% data_dir %]';
-[% END %]
+install_share '[% data_dir %]';[% END %]
 
 WriteMakefile(
     NAME             => '[% name %]',
     DISTNAME         => '[% dist_name %]',
     AUTHOR           => q{[% author.name %] <[% author.email %]>},
     VERSION_FROM     => '[% base_package %]',
-    [% IF abstract %] ABSTRACT         => q{[% abstract %]}, [% END %]
+    [% IF abstract %]ABSTRACT         => q{[% abstract %]},[% END %]
     LICENSE          => 'mit',
-#    EXE_FILES        => ['script/mkdoc'],
+    [% IF exe_files %]EXE_FILES        => [[% FOREACH f in exe_files %] '[% f %]', [% END %]],[% END %]
     MIN_PERL_VERSION => '5.024',
     MAN3PODS         => {},
     # Directories in which we look for Makefile.PL. In general could be omitted but is needed in case there
@@ -31,8 +28,7 @@ WriteMakefile(
       no_index => {
         directory => [ 'local', 'vendor' ],
       },
-      [% IF github %]
-      resources => {
+      [% IF github %]resources => {
         repository => {
           type => 'git',
           url => 'git@github.com:[% github.username %]/[% github.repository_name %].git',
@@ -41,14 +37,11 @@ WriteMakefile(
         bugtracker => {
           web => 'https://github.com/[% github.username %]/[% github.repository_name %]/issues',
         },
-      },
-      [% END %]
+      },[% END %]
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => '.gz', },
     clean => { FILES => '[% dist_name %]-*' },
 );
 
-[% IF data_dir %]
-package MY;
-use File::ShareDir::Install qw(postamble);
-[% END %]
+[% IF data_dir %]package MY;
+use File::ShareDir::Install qw(postamble);[% END %]
