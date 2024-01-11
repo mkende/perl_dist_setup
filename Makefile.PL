@@ -6,6 +6,7 @@ use warnings;
 use ExtUtils::MakeMaker::CPANfile;
 use File::ShareDir::Install;
 
+$File::ShareDir::Install::INCLUDE_DOTFILES = 1;
 install_share 'data';
 
 WriteMakefile(

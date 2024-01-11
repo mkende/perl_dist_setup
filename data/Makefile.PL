@@ -4,6 +4,7 @@ use warnings;
 use ExtUtils::MakeMaker::CPANfile;
 [% IF data_dir %]use File::ShareDir::Install;
 
+$File::ShareDir::Install::INCLUDE_DOTFILES = 1;
 install_share '[% data_dir %]';[% END %]
 
 WriteMakefile(
