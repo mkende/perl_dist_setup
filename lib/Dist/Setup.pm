@@ -14,7 +14,7 @@ use Template;
 
 our $VERSION = '0.01';
 
-my $conf;
+my %conf;
 my $tt;
 my $tt_raw;
 my $target_dir;
@@ -35,12 +35,13 @@ sub setup {
   }
 
   my $eval = Eval::Safe->new();
-  $conf = $eval-> do($conf_file) or die "Cannot parse the ${conf_file_name} configuration: $@";
+  %conf = %{$eval->do($conf_file)} or die "Cannot parse the ${conf_file_name} configuration: $@";
+  $eval->share('%conf');
 
-  $conf->{auto}{date}{year} = (localtime)[5] + 1900 ;
-  $conf->{dist_name} //= $conf->{name} =~ s/::/-/gr;
-  $conf->{base_package} //= 'lib/'. ($conf->{name} =~ s{::}{/}gr) .'.pm';
-  $conf->{footer_marker} = $footer_marker;
+  $conf{auto}{date}{year} = (localtime)[5] + 1900 ;
+  $conf{dist_name} //= $conf{name} =~ s/::/-/gr;
+  $conf{base_package} //= 'lib/'. ($conf{name} =~ s{::}{/}gr) .'.pm';
+  $conf{footer_marker} = $footer_marker;
 
   $tt = Template->new({
     INCLUDE_PATH => $data_dir, 
@@ -59,9 +60,23 @@ sub setup {
     no_chdir => 1,
     wanted => sub {
       my $f = basename($_);
+      print "Seeing $_\n";
       if ($f =~ m/^\./) {
         $File::Find::prune = 1;
         return;
+      }
+      my $cond_file = -d $_ ? catfile($_, '.cond') : $_ . '.cond';
+      if (-f $cond_file) {
+        print "Evaluating ${cond_file}\n";
+        my $ret = $eval->do($cond_file);
+        print "Result is: $ret\n";
+        die "Cannot evaluate ${cond_file}: $@" if $@;
+        die "Cannot read ${cond_file}: $!" if $!;
+        unless ($ret) {
+          $File::Find::prune = 1;
+          print "Pruned $_\n";
+          return;
+        }
       }
       return if -d $_;
       die "Cannot read $_: $!" unless -r $_;
@@ -100,7 +115,7 @@ sub setup_file {
     }
   }
 
-  $dest_tt->process($src_file, { %$conf, footer_content => $footer }, $target_file)
+  $dest_tt->process($src_file, { %conf, footer_content => $footer }, $target_file)
     or die "Cannot process template ${src_file}: ".$dest_tt->error()."\n";
 }
 

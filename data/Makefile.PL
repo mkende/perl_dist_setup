@@ -1,4 +1,4 @@
-use 5.026;
+use [% min_perl_version %];
 use strict;
 use warnings;
 use ExtUtils::MakeMaker::CPANfile;
@@ -14,7 +14,7 @@ WriteMakefile(
     [% IF abstract %]ABSTRACT         => q{[% abstract %]},[% END %]
     LICENSE          => 'mit',
     [% IF exe_files %]EXE_FILES        => [[% FOREACH f IN exe_files %]'[% f %]',[% END %]],[% END %]
-    MIN_PERL_VERSION => '5.026',
+    MIN_PERL_VERSION => '[% min_perl_version %]',
     MAN3PODS         => {},
     # Directories in which we look for Makefile.PL. In general could be omitted but is needed in case there
     # is a file named Makefile.PL in a sub-directory. Should be customized if such a file needs to be
