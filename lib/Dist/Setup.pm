@@ -112,6 +112,7 @@ sub setup_file {
       }
       $footer = join('', <$f>) unless eof($f);
       $footer =~ s/\n+$//;
+      $footer = "\n".$footer if $footer;  # There is no new line before footer in the template.
       close $f;
     }
   }

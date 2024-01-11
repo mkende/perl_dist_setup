@@ -49,4 +49,3 @@ WriteMakefile(
 package MY;
 use File::ShareDir::Install qw(postamble);
 # End of the template. You can add custom content below this line.
-
