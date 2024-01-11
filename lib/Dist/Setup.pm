@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use utf8;
 use feature ':5.24';
+use version 0.77;
 
 use Eval::Safe;
 use File::Basename 'basename', 'dirname';
@@ -14,7 +15,7 @@ use Template;
 
 our $VERSION = '0.01';
 
-my %conf;
+our %conf;  # to be shared with the Eval::Safe object.
 my $tt;
 my $tt_raw;
 my $target_dir;
@@ -42,6 +43,7 @@ sub setup {
   $conf{dist_name} //= $conf{name} =~ s/::/-/gr;
   $conf{base_package} //= 'lib/'. ($conf{name} =~ s{::}{/}gr) .'.pm';
   $conf{footer_marker} = $footer_marker;
+  $conf{short_min_perl_version} = version->parse($conf{min_perl_version})->normal =~ s/^v(\d+\.\d+)\..*$/$1/r;
 
   $tt = Template->new({
     INCLUDE_PATH => $data_dir, 
@@ -60,21 +62,23 @@ sub setup {
     no_chdir => 1,
     wanted => sub {
       my $f = basename($_);
-      print "Seeing $_\n";
       if ($f =~ m/^\./) {
         $File::Find::prune = 1;
         return;
       }
+
+      my $src = abs2rel($_, $data_dir);
+      my $out = $src;
+      $out =~ s/(^|\/)dot_/${1}./g;
+
       my $cond_file = -d $_ ? catfile($_, '.cond') : $_ . '.cond';
       if (-f $cond_file) {
-        print "Evaluating ${cond_file}\n";
         my $ret = $eval->do($cond_file);
-        print "Result is: $ret\n";
         die "Cannot evaluate ${cond_file}: $@" if $@;
         die "Cannot read ${cond_file}: $!" if $!;
         unless ($ret) {
           $File::Find::prune = 1;
-          print "Pruned $_\n";
+          print "Skipped ${out}\n";
           return;
         }
       }
@@ -83,10 +87,7 @@ sub setup {
       return if $f eq 'dist_setup.conf';
       return if $f =~ m/^tt_/;
 
-      my $src = abs2rel($_, $data_dir);
-      $f =~ s/^dot_/./;
-      my $out = catfile(dirname($src), $f);
-
+      print "Processing ${out}\n";
       setup_file($src, $out);
     },
   }, $data_dir);
@@ -105,7 +106,7 @@ sub setup_file {
     $dest_tt = $tt;
     my $dest_file = catfile($target_dir, $target_file);
     if (-e $dest_file) {
-      open my $f, '<',  $dest_file;
+      open my $f, '<:encoding(UTF-8)',  $dest_file;
       while (<$f>) {
         last if /^${footer_marker}$/m; 
       }
@@ -115,7 +116,7 @@ sub setup_file {
     }
   }
 
-  $dest_tt->process($src_file, { %conf, footer_content => $footer }, $target_file)
+  $dest_tt->process($src_file, { %conf, footer_content => $footer }, $target_file, { binmode => ':utf8'})
     or die "Cannot process template ${src_file}: ".$dest_tt->error()."\n";
 }
 
