@@ -1,5 +1,6 @@
 # DO NOT EDIT! This file is written by perl_setup_dist.
 # If needed, you can add content at the end of the file.
+
 use 5.026;
 use strict;
 use warnings;
@@ -63,4 +64,5 @@ MAKE_FRAGMENT
 
 # You can add below this template a `postamble` sub that returns more content to
 # add to the generated Makefile.
+
 # End of the template. You can add custom content below this line.

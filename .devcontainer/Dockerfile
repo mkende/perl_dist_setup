@@ -1,5 +1,6 @@
 # DO NOT EDIT! This file is written by perl_setup_dist.
 # If needed, you can add content at the end of the file.
+
 # All official images are listed at:
 # https://hub.docker.com/_/microsoft-vscode-devcontainers
 #
@@ -15,4 +16,5 @@ RUN apt-get install -y libaspell-dev cpanminus perlbrew libcpan-uploader-perl
 
 ENV PERL_MM_USE_DEFAULT=1
 RUN perlbrew init
+
 # End of the template. You can add custom content below this line.
