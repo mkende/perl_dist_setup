@@ -1,0 +1,10 @@
+Revision history for perl distribution Dist-Setup
+
+0.02 - 2024-01-26
+ - Added support for GitHub CI and dev container.
+ - Fix spurious new lines being added at the end of the templates.
+ - Add support for a cpan-upload command in the Makefile.
+ - Fix a bug with a badly name MANIFEST.skip file.
+
+0.01 - 2023-12-27
+ - Initial release
