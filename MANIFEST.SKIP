@@ -9,8 +9,9 @@
 ^\.perlcriticrc$
 ^\.perltidyrc$
 ^Makefile$
+^Makefile.old$
 ^MANIFEST\.bak$
-^MANIFEST\.skip$
+^MANIFEST\.SKIP$
 ^blib/
 ^cpanfile\.snapshot$
 ^dist_setup\.conf$
