@@ -54,7 +54,7 @@ sub MY::postamble {
   
   push @postamble, <<"MAKE_FRAGMENT";
 distupload: tardist
-\tcpan-upload --dry-run --directory Dist-Setup \$(DISTVNAME).tar\$(SUFFIX)
+\tcpan-upload --directory Dist-Setup \$(DISTVNAME).tar\$(SUFFIX)
 MAKE_FRAGMENT
 
   push @postamble, File::ShareDir::Install::postamble($self);
