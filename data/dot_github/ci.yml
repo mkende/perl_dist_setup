@@ -2,7 +2,13 @@ name: Perl Tests
 
 on:
   push:
+    branches-ignore:
+      - 'exp-**'
+      - 'exp/**'
   pull_request:
+    branches-ignore:
+      - 'exp-**'
+      - 'exp/**'
 
 jobs:
   test:
