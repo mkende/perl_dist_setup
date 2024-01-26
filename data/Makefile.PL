@@ -44,5 +44,20 @@ WriteMakefile(
     clean => { FILES => '[% dist_name %]-*' },
 );
 
-[% IF data_dir %]package MY;
-use File::ShareDir::Install qw(postamble);[% END %]
+sub MY::postamble {
+  my ($self) = @_;
+
+  my @postamble;
+  push @postamble, ::postamble() if *::postamble{CODE};
+  
+  push @postamble, <<"MAKE_FRAGMENT";
+distupload: tardist
+\tcpan-upload --dry-run --directory [% dist_name %] \$(DISTVNAME).tar\$(SUFFIX)
+MAKE_FRAGMENT
+
+  [% IF data_dir %]push @postamble, File::ShareDir::Install::postamble($self);[% END %]
+  return join "\n", @postamble;
+}
+
+# You can add below this template a `postamble` sub that returns more content to
+# add to the generated Makefile.

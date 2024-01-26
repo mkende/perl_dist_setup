@@ -46,6 +46,21 @@ WriteMakefile(
     clean => { FILES => 'Dist-Setup-*' },
 );
 
-package MY;
-use File::ShareDir::Install qw(postamble);
+sub MY::postamble {
+  my ($self) = @_;
+
+  my @postamble;
+  push @postamble, ::postamble() if *::postamble{CODE};
+  
+  push @postamble, <<"MAKE_FRAGMENT";
+distupload: tardist
+\tcpan-upload --dry-run --directory Dist-Setup \$(DISTVNAME).tar\$(SUFFIX)
+MAKE_FRAGMENT
+
+  push @postamble, File::ShareDir::Install::postamble($self);
+  return join "\n", @postamble;
+}
+
+# You can add below this template a `postamble` sub that returns more content to
+# add to the generated Makefile.
 # End of the template. You can add custom content below this line.
