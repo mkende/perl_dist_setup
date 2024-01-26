@@ -1,5 +1,8 @@
 Revision history for perl distribution Dist-Setup
 
+0.03 - ?????
+ - Cleaner new lines in generated files.
+
 0.02 - 2024-01-26
  - Added support for GitHub CI and dev container.
  - Fix spurious new lines being added at the end of the templates.

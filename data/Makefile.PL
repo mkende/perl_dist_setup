@@ -49,14 +49,15 @@ sub MY::postamble {
 
   my @postamble;
   push @postamble, ::postamble() if *::postamble{CODE};
-  
+
   push @postamble, <<"MAKE_FRAGMENT";
 distupload: tardist
 \tcpan-upload --directory [% dist_name %] \$(DISTVNAME).tar\$(SUFFIX)
 MAKE_FRAGMENT
 
-  [% IF data_dir %]push @postamble, File::ShareDir::Install::postamble($self);[% END %]
-  return join "\n", @postamble;
+[% IF data_dir %]  push @postamble, File::ShareDir::Install::postamble($self);
+
+[% END %]  return join "\n", @postamble;
 }
 
 # You can add below this template a `postamble` sub that returns more content to

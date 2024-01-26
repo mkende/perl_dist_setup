@@ -52,13 +52,14 @@ sub MY::postamble {
 
   my @postamble;
   push @postamble, ::postamble() if *::postamble{CODE};
-  
+
   push @postamble, <<"MAKE_FRAGMENT";
 distupload: tardist
 \tcpan-upload --directory Dist-Setup \$(DISTVNAME).tar\$(SUFFIX)
 MAKE_FRAGMENT
 
   push @postamble, File::ShareDir::Install::postamble($self);
+
   return join "\n", @postamble;
 }
 
