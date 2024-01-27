@@ -2,6 +2,7 @@ Revision history for perl distribution Dist-Setup
 
 0.03 - ?????
  - Cleaner new lines in generated files.
+ - Generate a barebone Changes file if not already present.
 
 0.02 - 2024-01-26
  - Added support for GitHub CI and dev container.

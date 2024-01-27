@@ -49,6 +49,7 @@ sub setup {
     INCLUDE_PATH => $data_dir, 
     OUTPUT_PATH => $target_dir,
     ENCODING => 'utf8',
+    EVAL_PERL => 1,
     PRE_PROCESS => 'tt_header',
     POST_PROCESS => 'tt_footer',
   });
@@ -56,6 +57,7 @@ sub setup {
     INCLUDE_PATH => $data_dir, 
     OUTPUT_PATH => $target_dir,
     ENCODING => 'utf8',
+    EVAL_PERL => 1,
   });
 
   find({
@@ -66,6 +68,9 @@ sub setup {
         $File::Find::prune = 1;
         return;
       }
+      return if $f eq 'dist_setup.conf';
+      return if $f =~ m/^tt_/;
+      return if $f =~ m/\.cond$/;
 
       my $src = abs2rel($_, $data_dir);
       my $out = $src;
@@ -84,8 +89,6 @@ sub setup {
       }
       return if -d $_;
       die "Cannot read $_: $!" unless -r $_;
-      return if $f eq 'dist_setup.conf';
-      return if $f =~ m/^tt_/;
 
       print "Processing ${out}\n";
       setup_file($src, $out);
