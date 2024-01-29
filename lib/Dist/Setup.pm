@@ -13,7 +13,7 @@ use File::Find;
 use File::Spec::Functions 'abs2rel', 'catfile';
 use Template;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 our %conf;  # to be shared with the Eval::Safe object.
 my $tt;

@@ -3,6 +3,10 @@ Revision history for perl distribution Dist-Setup
 0.03 - ?????
  - Cleaner new lines in generated files.
  - Generate a barebone Changes file if not already present.
+ - Use the Lancaster consensus environment variable in GitHub CI and tests.
+ - Add a test for the syntax of the POD file.
+ - Add support for spell-checking the files (and testing it).
+ - Add perlcritic and (partial) perltidy supports.
 
 0.02 - 2024-01-26
  - Added support for GitHub CI and dev container.

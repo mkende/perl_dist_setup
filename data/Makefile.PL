@@ -53,6 +53,22 @@ sub MY::postamble {
   push @postamble, <<"MAKE_FRAGMENT";
 distupload: tardist
 \tcpan-upload --directory [% dist_name %] \$(DISTVNAME).tar\$(SUFFIX)
+
+cover:
+\tcover -test
+
+critic:
+\tperlcritic lib [% IF exe_files %]script[% END %]
+
+tidy:
+\tperltidy -b -bext='/' \$(shell find lib -name "*.pm")[% IF exe_files %][% FOREACH f IN exe_files %] [% f %][% END %][% END %]
+
+spelling: export EXTENDED_TESTING = 1
+spelling:
+\t\$(PERLRUN) t/001-spelling.t --interactive
+
+alltest: export EXTENDED_TESTING = 1
+alltest: test
 MAKE_FRAGMENT
 
 [% IF data_dir %]  push @postamble, File::ShareDir::Install::postamble($self);
