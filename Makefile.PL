@@ -1,6 +1,8 @@
 # DO NOT EDIT! This file is written by perl_setup_dist.
 # If needed, you can add content at the end of the file.
 
+## no critic (Policy)
+
 use 5.026;
 use strict;
 use warnings;
@@ -56,6 +58,22 @@ sub MY::postamble {
   push @postamble, <<"MAKE_FRAGMENT";
 distupload: tardist
 \tcpan-upload --directory Dist-Setup \$(DISTVNAME).tar\$(SUFFIX)
+
+cover:
+\tcover -test
+
+critic:
+\tperlcritic lib script
+
+tidy:
+\tperltidy -b -bext='/' \$(shell find lib -name "*.pm") script/perl_dist_setup
+
+spelling: export EXTENDED_TESTING = 1
+spelling:
+\t\$(PERLRUN) t/001-spelling.t --interactive
+
+alltest: export EXTENDED_TESTING = 1
+alltest: test
 MAKE_FRAGMENT
 
   push @postamble, File::ShareDir::Install::postamble($self);
@@ -67,3 +85,11 @@ MAKE_FRAGMENT
 # add to the generated Makefile.
 
 # End of the template. You can add custom content below this line.
+
+sub postamble {
+  return <<"MAKE_FRAGMENT";
+tidy: tidytest
+tidytest:
+\tperltidy -b -bext='/' \$(shell find data/t -name "*.t")
+MAKE_FRAGMENT
+}
