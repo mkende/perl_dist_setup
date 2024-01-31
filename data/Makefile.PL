@@ -1,4 +1,4 @@
-## no critic
+## no critic (Policy)
 
 use [% min_perl_version %];
 use strict;

@@ -15,21 +15,25 @@ our $VERSION = 0.01;
 
 BEGIN {
   if (not $ENV{EXTENDED_TESTING}) {
-    skip_all('Extended test. Set $ENV{EXTENDED_TESTING} to a true value to run.');
+    skip_all(
+      'Extended test. Set $ENV{EXTENDED_TESTING} to a true value to run.');
   }
 }
 
-my $aspell = `which aspell 2> /dev/null`;  ## no critic
+my $aspell = `which aspell 2> /dev/null`;  ## no critic (ProhibitBacktickOperators)
 
 my $root = $FindBin::Bin.'/..';
 
 my $mode = (@ARGV && $ARGV[0] eq '--interactive') ? 'interactive' : 'list';
 
-my @base_cmd = ('aspell', '--encoding=utf-8', "--home-dir=${root}",
-                '--lang=en_GB-ise', '-p',  '.aspelldict');
+my @base_cmd = (
+  'aspell', '--encoding=utf-8',
+  "--home-dir=${root}", '--lang=en_GB-ise',
+  '-p', '.aspelldict'
+);
 
 if (not $aspell) {
-   skip_all('The aspell program is required in the path to check the spelling.');
+  skip_all('The aspell program is required in the path to check the spelling.');
 }
 
 sub list_bad_words {
@@ -65,9 +69,11 @@ sub wanted {
 
   my $file_from_root = abs2rel($File::Find::name, $root);
   if ($mode eq 'list') {
-    like(list_bad_words($_, $type), qr/^\s*$/, "Spell-checking ${file_from_root}");
+    like(list_bad_words($_, $type),
+      qr/^\s*$/, "Spell-checking ${file_from_root}");
   } elsif ($mode eq 'interactive') {
-    is(interactive_check($_, $type), 0, "Interactive spell-checking for ${file_from_root}");
+    is(interactive_check($_, $type),
+      0, "Interactive spell-checking for ${file_from_root}");
   } else {
     die "Unknown operating mode: '${mode}'";
   }
