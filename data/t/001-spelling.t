@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 use strict;
 use warnings;
 
@@ -9,13 +11,15 @@ use File::Find 'find';
 use File::Spec::Functions 'abs2rel';
 use FindBin;
 
+our $VERSION = 0.01;
+
 BEGIN {
   if (not $ENV{EXTENDED_TESTING}) {
     skip_all('Extended test. Set $ENV{EXTENDED_TESTING} to a true value to run.');
   }
 }
 
-my $aspell = `which aspell 2> /dev/null`;
+my $aspell = `which aspell 2> /dev/null`;  ## no critic
 
 my $root = $FindBin::Bin.'/..';
 
@@ -32,7 +36,7 @@ sub list_bad_words {
   my ($file, $type) = @_;
   my $bad_words;
   my @cmd = (@base_cmd, "--mode=${type}", 'list');
-  run3(\@cmd, $file, \$bad_words) or die "Can’t run aspell: $!";
+  run3(\@cmd, $file, \$bad_words) or die "Can’t run aspell: $!\n";
   return $bad_words;
 }
 
@@ -47,11 +51,11 @@ sub interactive_check {
 
 sub wanted {
   # We should do something more generic to not recurse in Git sub-modules.
-  $File::Find::prune = 1 if -d && m/^(blib|third_party|\..+)$/;
+  $File::Find::prune = 1 if -d && m/^ (?: blib | third_party | \..+ ) $/x;
   return unless -f;
 
   my $type;
-  if (m/\.(pm|pod)$/ || basename(dirname($_)) eq 'script') {
+  if (m/\.(?:pm|pod)$/ || basename(dirname($_)) eq 'script') {
     $type = 'perl';
   } elsif (m/\.md$/) {
     $type = 'markdown';
@@ -67,6 +71,8 @@ sub wanted {
   } else {
     die "Unknown operating mode: '${mode}'";
   }
+
+  return;
 }
 
 find(\&wanted, $root);

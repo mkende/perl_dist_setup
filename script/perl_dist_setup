@@ -10,6 +10,8 @@ use File::ShareDir qw(dist_dir);
 use File::Spec::Functions qw(abs2rel canonpath catfile updir);
 use FindBin;
 
+our $VERSION = $Dist::Setup::VERSION;  ## no critic (ProhibitComplexVersion, RequireConstantVersion)
+
 my $data_dir = catfile($FindBin::Bin, updir(), 'data');
 if (! -d $data_dir) {
   # If the directory does not exist next to the binary, we’re assuming that

@@ -6,6 +6,11 @@ use warnings;
 use English;
 use FindBin;
 use Test2::V0;
+use Readonly;
+
+Readonly my $TEST_POD_VERSION => 1.22;
+
+our $VERSION = 0.01;
 
 BEGIN {
   if (not $ENV{EXTENDED_TESTING}) {
@@ -15,16 +20,16 @@ BEGIN {
 
 # Ensure a recent version of Test::Pod is present
 BEGIN {
-  my $test_pod_version = 1.22;
-  eval "use Test::Pod $test_pod_version";
+  eval "use Test::Pod ${TEST_POD_VERSION}";  ## no critic
   if ($EVAL_ERROR) {
-    skip_all("Test::Pod $test_pod_version required for testing POD");
+    skip_all("Test::Pod ${TEST_POD_VERSION} required for testing POD");
   }
 }
 
 my @dirs;
 sub add_if_exists {
   return push @dirs, $_[0] if -d $_[0];
+  return;
 }
 
 if (!add_if_exists("${FindBin::Bin}/../blib")) {

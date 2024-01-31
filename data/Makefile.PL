@@ -1,3 +1,5 @@
+## no critic
+
 use [% min_perl_version %];
 use strict;
 use warnings;
