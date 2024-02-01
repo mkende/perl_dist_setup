@@ -51,6 +51,9 @@ sub setup {
   $conf{short_min_perl_version} =
       version->parse($conf{min_perl_version})->normal =~
       s/^v(\d+\.\d+)\..*$/$1/r;
+  $conf{dotted_min_perl_version} =
+      version->parse($conf{min_perl_version})->normal =~
+      s/^v(\d+(?:\.\d+)*).*$/$1/r;
 
   $tt = Template->new(
     {
