@@ -14,7 +14,7 @@ BEGIN {
 }
 {
   no warnings 'once';  ## no critic (ProhibitNoWarnings)
-  note("Testing Dist::Setup $Dist::Setup::VERSION, Perl $], $^X, $ENV{SHELL}");
+  note("Testing Dist::Setup $Dist::Setup::VERSION, Perl $], $^X");
 }
 
 done_testing;

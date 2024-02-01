@@ -8,8 +8,6 @@ use FindBin;
 use Test2::V0;
 use Readonly;
 
-Readonly my $TEST_POD_VERSION => 1.22;
-
 our $VERSION = 0.01;
 
 BEGIN {
@@ -21,6 +19,7 @@ BEGIN {
 
 # Ensure a recent version of Test::Pod is present
 BEGIN {
+  Readonly my $TEST_POD_VERSION => 1.22;
   eval "use Test::Pod ${TEST_POD_VERSION}";  ## no critic (ProhibitStringyEval, RequireCheckingReturnValueOfEval)
   if ($EVAL_ERROR) {
     skip_all("Test::Pod ${TEST_POD_VERSION} required for testing POD");
