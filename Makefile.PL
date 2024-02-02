@@ -37,11 +37,11 @@ WriteMakefile(
       resources => {
         repository => {
           type => 'git',
-          url => 'git@github.com:mkende/dist_setup.git',
-          web => 'https://github.com/mkende/dist_setup',
+          url => 'git@github.com:mkende/perl-dist-setup.git',
+          web => 'https://github.com/mkende/perl-dist-setup',
         },
         bugtracker => {
-          web => 'https://github.com/mkende/dist_setup/issues',
+          web => 'https://github.com/mkende/perl-dist-setup/issues',
         },
       },
     },

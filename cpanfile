@@ -9,6 +9,7 @@ on 'configure' => sub {
 
 on 'test' => sub {
   requires 'Test::More';
+  requires 'Test2::V0';
   recommends 'Test::Pod', '1.22';
   recommends 'Test2::Tools::PerlCritic';
   suggests 'Perl::Tidy', '20220613';
