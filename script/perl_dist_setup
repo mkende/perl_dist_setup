@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use 5.022;
+use 5.026;
 use strict;
 use warnings;
 
@@ -10,7 +10,7 @@ use File::ShareDir qw(dist_dir);
 use File::Spec::Functions qw(abs2rel canonpath catfile updir);
 use FindBin;
 
-our $VERSION = $Dist::Setup::VERSION; ## no critic (ProhibitComplexVersion, RequireConstantVersion)
+our $VERSION = $Dist::Setup::VERSION;  ## no critic (ProhibitComplexVersion, RequireConstantVersion)
 
 my $data_dir = catfile($FindBin::Bin, updir(), 'data');
 if (!-d $data_dir) {

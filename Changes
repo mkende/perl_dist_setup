@@ -1,5 +1,10 @@
 Revision history for perl distribution Dist-Setup
 
+0.06 - 2023-02-03
+
+ - Be more permissive with regex in PerlCritic
+ - Add a Test::CPANfile test to check that all dependencies are listed.
+
 0.05 - 2025-02-02
 
  - Add the missing Test2::V0 dependency in the cpanfile.

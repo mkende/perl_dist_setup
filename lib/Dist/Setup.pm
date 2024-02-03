@@ -14,15 +14,14 @@ use File::Spec::Functions 'abs2rel', 'catfile';
 use Template;
 use Time::localtime;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 our %conf;  # to be shared with the Eval::Safe object.
 my $tt;
 my $tt_raw;
 my $target_dir;
 
-my $footer_marker =
-    '# End of the template. You can add custom content below this line.';
+my $footer_marker = '# End of the template. You can add custom content below this line.';
 
 sub setup {
   my ($data_dir, $target_dir_local) = @_;
@@ -34,8 +33,7 @@ sub setup {
     print STDERR "No ${conf_file_name} in target directory.\n";
     copy(catfile($data_dir, $conf_file_name), $conf_file)
         or die "Cannot copy ${conf_file_name}: $!\n";
-    print STDERR
-        "Created a new configuration file. Modify it then run this tool again.\n";
+    print STDERR "Created a new configuration file. Modify it then run this tool again.\n";
     exit 0;
   }
 
@@ -49,31 +47,26 @@ sub setup {
   $conf{base_package} //= 'lib/'.($conf{name} =~ s{::}{/}gr).'.pm';
   $conf{footer_marker} = $footer_marker;
   $conf{short_min_perl_version} =
-      version->parse($conf{min_perl_version})->normal =~
-      s/^v(\d+\.\d+)\..*$/$1/r;
+      version->parse($conf{min_perl_version})->normal =~ s/^v(\d+\.\d+)\..*$/$1/r;
   $conf{dotted_min_perl_version} =
-      version->parse($conf{min_perl_version})->normal =~
-      s/^v(\d+(?:\.\d+)*).*$/$1/r;
+      version->parse($conf{min_perl_version})->normal =~ s/^v(\d+(?:\.\d+)*).*$/$1/r;
 
-  $tt = Template->new(
-    {
-      INCLUDE_PATH => $data_dir,
-      OUTPUT_PATH => $target_dir,
-      ENCODING => 'utf8',
-      EVAL_PERL => 1,
-      PRE_PROCESS => 'tt_header',
-      POST_PROCESS => 'tt_footer',
-    });
-  $tt_raw = Template->new(
-    {
-      INCLUDE_PATH => $data_dir,
-      OUTPUT_PATH => $target_dir,
-      ENCODING => 'utf8',
-      EVAL_PERL => 1,
-    });
+  $tt = Template->new({
+    INCLUDE_PATH => $data_dir,
+    OUTPUT_PATH => $target_dir,
+    ENCODING => 'utf8',
+    EVAL_PERL => 1,
+    PRE_PROCESS => 'tt_header',
+    POST_PROCESS => 'tt_footer',
+  });
+  $tt_raw = Template->new({
+    INCLUDE_PATH => $data_dir,
+    OUTPUT_PATH => $target_dir,
+    ENCODING => 'utf8',
+    EVAL_PERL => 1,
+  });
 
-  find(
-    {
+  find({
       no_chdir => 1,
       wanted => sub {
         my $f = basename($_);

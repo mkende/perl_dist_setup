@@ -59,7 +59,11 @@ distupload: tardist
 cover:
 \tcover -test
 
+critic: export EXTENDED_TESTING = 1
 critic:
+\tperl -Ilib t/001-perlcritic.t 2>&1 | less
+
+rawcritic:
 \tperlcritic lib [% IF exe_files %]script[% END %]
 
 tidy:
