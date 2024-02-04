@@ -56,7 +56,8 @@ sub MY::postamble {
   push @postamble, ::postamble() if *::postamble{CODE};
 
   push @postamble, <<"MAKE_FRAGMENT";
-distupload: distcheck disttest tardist
+distupload: distcheck disttest
+\t\$(MAKE) tardist
 \tcpan-upload --directory Dist-Setup \$(DISTVNAME).tar\$(SUFFIX)
 
 cover:
