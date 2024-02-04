@@ -1,5 +1,9 @@
 Revision history for perl distribution Dist-Setup
 
+0.08 - 2023-02-04
+
+ - Update the Git repository name to match the name of the binary.
+
 0.07 - 2023-02-04
 
  - Add POD documentation to the perl_dist_setup script and Dist::Setup module.
