@@ -66,7 +66,7 @@ sub wanted {
   return unless -f;
 
   my $type;
-  if (m/\.(?:pm|pod)$/ || basename(dirname($_)) eq 'script') {
+  if (m/\.(?:pm|pod)$/ || basename($File::Find::dir) eq 'script') {
     $type = 'perl';
   } elsif (m/\.md$/) {
     $type = 'markdown';

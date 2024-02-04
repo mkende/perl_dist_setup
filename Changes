@@ -1,5 +1,10 @@
 Revision history for perl distribution Dist-Setup
 
+0.07 - 2023-02-04
+
+ - Add POD documentation to the perl_dist_setup script and Dist::Setup module.
+ - Improve the support for the `make cover` target.
+
 0.06 - 2023-02-03
 
  - Be more permissive with regex in PerlCritic

@@ -17,7 +17,7 @@ WriteMakefile(
     DISTNAME         => 'Dist-Setup',
     AUTHOR           => q{Mathias Kende <mathias@cpan.org>},
     VERSION_FROM     => 'lib/Dist/Setup.pm',
-    ABSTRACT         => q{Simple opinionated tool to setup a Perl distribution directory.},
+    ABSTRACT         => q{Simple opinionated tool to set up a Perl distribution directory.},
     LICENSE          => 'mit',
     EXE_FILES        => ['script/perl_dist_setup',],
     MIN_PERL_VERSION => '5.026',
@@ -64,7 +64,7 @@ cover:
 \tcover -test
 
 critic: export EXTENDED_TESTING = 1
-critic:
+critic: all
 \tperl -Ilib t/001-perlcritic.t 2>&1 | less
 
 rawcritic:

@@ -14,7 +14,7 @@ use File::Spec::Functions 'abs2rel', 'catfile';
 use Template;
 use Time::localtime;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 our %conf;  # to be shared with the Eval::Safe object.
 my $tt;
@@ -137,3 +137,15 @@ sub setup_file {
 }
 
 1;
+
+__END__
+
+=pod
+
+=encoding utf8
+
+=head1 NAME
+
+Dist::Setup – Internal implementation for the C<perl_dist_setup> tool.
+
+For all the documentation, please refer to the L<perl_dist_setup> page.

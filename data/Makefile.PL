@@ -61,7 +61,7 @@ cover:
 \tcover -test
 
 critic: export EXTENDED_TESTING = 1
-critic:
+critic: all
 \tperl -Ilib t/001-perlcritic.t 2>&1 | less
 
 rawcritic:
