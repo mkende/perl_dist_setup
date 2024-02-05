@@ -1,5 +1,10 @@
 Revision history for perl distribution Dist-Setup
 
+0.09 - 2023-02-05
+
+ - Improve spell checking for Perl files by manually calling the `context`
+   aspell filter (instead of using the `perl` mode that does not work well).
+
 0.08 - 2023-02-04
 
  - Update the Git repository name to match the name of the binary.
