@@ -1,5 +1,9 @@
 Revision history for perl distribution Dist-Setup
 
+0.10 - ??
+
+ - Don’t create backup of the source files when running aspell.
+
 0.09 - 2023-02-05
 
  - Improve spell checking for Perl files by manually calling the `context`

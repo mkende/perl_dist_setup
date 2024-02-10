@@ -36,8 +36,10 @@ my $root = $FindBin::Bin.'/..';
 
 my $mode = (@ARGV && $ARGV[0] eq '--interactive') ? 'interactive' : 'list';
 
-my @base_cmd =
-    ('aspell', '--encoding=utf-8', "--home-dir=${root}", '--lang=en', '-p', '.aspelldict');
+my @base_cmd = (
+  'aspell', '--encoding=utf-8', "--home-dir=${root}", '--dont-backup',
+  '--lang=en', '-p', '.aspelldict'
+);
 
 # For some reasons, the --mode=perl option of Aspell does not work correctly (in
 # all cases, it would not handle POD content). so we are passing manually the
@@ -45,14 +47,10 @@ my @base_cmd =
 my %lang_filter = (
   markdown => ['--mode=markdown'],
   perl => [
-    '--mode=none',
-    '--add-filter=url',
-    '--add-filter=context',
-    '--clear-context-delimiters',
-    '--add-context-delimiters==pod =cut',
-    '--add-context-delimiters=# \0',
-    '--add-context-delimiters=" "',
-    "--add-context-delimiters=' '"
+    '--mode=none', '--add-filter=url',
+    '--add-filter=context', '--clear-context-delimiters',
+    '--add-context-delimiters==pod =cut', '--add-context-delimiters=# \0',
+    '--add-context-delimiters=" "', "--add-context-delimiters=' '"
   ]
 );
 
