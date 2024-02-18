@@ -3,6 +3,9 @@ Revision history for perl distribution Dist-Setup
 0.10 - ??
 
  - Don’t create backup of the source files when running aspell.
+ - Add the README files to the MANIFEST.SKIP
+ - Let the user run our distribution tests manually without setting
+   ENV{EXTENDED_TESTING}.
 
 0.09 - 2023-02-05
 
