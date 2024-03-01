@@ -79,6 +79,7 @@ spelling:
 
 alltest: export EXTENDED_TESTING = 1
 alltest: test
+
 MAKE_FRAGMENT
 
   push @postamble, File::ShareDir::Install::postamble($self);

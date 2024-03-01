@@ -76,6 +76,11 @@ spelling:
 
 alltest: export EXTENDED_TESTING = 1
 alltest: test
+
+clean:: clean_coverdb
+
+clean_coverdb:
+\trm -fr cover_db
 MAKE_FRAGMENT
 
 [% IF data_dir %]  push @postamble, File::ShareDir::Install::postamble($self);
