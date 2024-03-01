@@ -6,6 +6,7 @@ Revision history for perl distribution Dist-Setup
  - Add the README files to the MANIFEST.SKIP
  - Let the user run our distribution tests manually without setting
    ENV{EXTENDED_TESTING}.
+ - Only recommends instead of requiring Devel::Cover.
 
 0.09 - 2023-02-05
 
