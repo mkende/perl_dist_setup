@@ -1,6 +1,6 @@
 Revision history for perl distribution Dist-Setup
 
-0.11 - ??
+0.11 - 2024-04-07
 
  - Clean the cover_db with the `make clean` command.
  - Add support to set a homepage in Makefile.PL
