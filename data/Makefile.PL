@@ -31,7 +31,8 @@ WriteMakefile(
       no_index => {
         directory => [ 'local', 'vendor' ],
       },
-      resources => {
+[% IF keywords %]      keywords => [[% FOREACH k IN keywords %]'[% k %]',[% END %]],
+[% END %]      resources => {
 [% IF homepage %]        homepage => q{[% homepage %]},
 [% END %][% IF github %]        repository => {
           type => 'git',
