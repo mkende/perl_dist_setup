@@ -3,7 +3,7 @@ Revision history for perl distribution Dist-Setup
 0.13 - ??
 
  - Fix a typo in the MANIFEST.SKIP file.
- - Add support to specify the keywords META directive.
+ - Add support to specify the keywords and no_index META directive.
 
 0.12 - 2024-04-10
 
