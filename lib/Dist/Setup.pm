@@ -53,7 +53,8 @@ sub setup {
 
   if ($conf{github}{use_ci}) {
     $conf{github}{use_ci} = {} unless ref $conf{github}{use_ci};
-    $conf{github}{use_ci}{runners} = [qw(ubuntu windows macos)] unless exists $conf{github}{use_ci}{runners};
+    $conf{github}{use_ci}{runners} = [qw(ubuntu windows macos)]
+        unless exists $conf{github}{use_ci}{runners};
   }
 
   $tt = Template->new({
