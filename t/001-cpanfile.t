@@ -25,8 +25,7 @@ cpanfile_has_all_used_modules(
   index => CPAN::Common::Index::Mux::Ordered->assemble(
     MetaDB => {},
     Mirror => {},
-  )
-);
+  ));
 
 done_testing;
 

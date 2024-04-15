@@ -8,6 +8,11 @@ on 'configure' => sub {
   requires 'ExtUtils::MakeMaker::CPANfile', '0.0.9';
 };
 
+requires 'File::ShareDir';
+on 'configure' => sub {
+  requires 'File::ShareDir::Install';
+};
+
 on 'test' => sub {
   requires 'CPAN::Common::Index::Mux::Ordered';
   requires 'Test::CPANfile';
@@ -24,6 +29,7 @@ on 'test' => sub {
 # Devel::Cover has many dependencies.
 on 'develop' => sub {
   recommends 'Devel::Cover';
+  suggests 'CPAN::Uploader';
 };
 
 # End of the template. You can add custom content below this line.

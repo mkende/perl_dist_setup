@@ -51,6 +51,11 @@ sub setup {
   $conf{dotted_min_perl_version} =
       version->parse($conf{min_perl_version})->normal =~ s/^v(\d+(?:\.\d+)*).*$/$1/r;
 
+  if ($conf{github}{use_ci}) {
+    $conf{github}{use_ci} = {} unless ref $conf{github}{use_ci};
+    $conf{github}{use_ci}{runners} = [qw(ubuntu windows macos)] unless exists $conf{github}{use_ci}{runners};
+  }
+
   $tt = Template->new({
     INCLUDE_PATH => $data_dir,
     OUTPUT_PATH => $target_dir,
