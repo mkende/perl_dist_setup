@@ -1,5 +1,9 @@
 Revision history for perl distribution Dist-Setup
 
+0.15 - ??
+
+ - Fix a typo in the template dist_setup.conf file.
+
 0.14 - 2024-04-15
 
  - Allow to specify the type of runners to use for the GitHub CI actions.
