@@ -27,4 +27,5 @@ on 'test' => sub {
 on 'develop' => sub {
   recommends 'Devel::Cover';
   suggests 'CPAN::Uploader';
-};
+[% IF name != 'Dist::Setup'%]  suggests 'Dist::Setup';
+[% END %]};
