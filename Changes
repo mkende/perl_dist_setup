@@ -6,6 +6,7 @@ Revision history for perl distribution Dist-Setup
  - Disable the ValuesAndExpressions::ProhibitNoisyQuotes perlcritic policy.
  - Add a pod2html make target to convert the POD documentation into HTML.
  - Process HTML files in the spelling test (but ignore the pod2html dir).
+ - Add an exe make target to generate packed executables with pp (experimental).
 
 0.14 - 2024-04-15
 

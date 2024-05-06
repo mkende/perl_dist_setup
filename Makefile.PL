@@ -60,7 +60,7 @@ sub MY::postamble {
 ALL_PM := \$(shell find lib -name "*.pm")
 ALL_EXE := script/perl_dist_setup
 
-.PHONY: distupload cover critic rawcritic tidy spelling alltest clean clean_coverdb pod2html
+.PHONY: distupload cover critic rawcritic tidy spelling alltest clean clean_coverdb pod2html exe
 
 distupload: distcheck disttest
 \t\$(MAKE) tardist
@@ -102,6 +102,17 @@ pod2html: \$(PM_HTML) \$(EXE_HTML)
 \$(EXE_HTML): pod2html/%.html: %
 \tmkdir -p \$(shell dirname \$@)
 \tpod2html --infile \$< --outfile \$@
+
+EXE_EXE := \$(patsubst %, build/%\$(EXE_EXT), \$(ALL_EXE))
+
+exe: export PAR_VERBATIM=1
+exe: build \$(EXE_EXE)
+
+build:
+\tmkdir -p build
+
+\$(EXE_EXE): build/%\$(EXE_EXT): %
+\tpp -o \$@ -cd build/pp.cache -I lib -F "PodStrip=.*\\bDist/Setup\\b(*COMMIT)(*FAIL)|.*" \$<
 
 MAKE_FRAGMENT
 

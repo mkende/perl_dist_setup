@@ -78,7 +78,8 @@ sub interactive_check {
 
 sub wanted {
   # We should do something more generic to not recurse in Git sub-modules.
-  $File::Find::prune = 1 if -d && m/^ (?: blib | third_party | pod2html | \..+ ) $/x;
+  $File::Find::prune = 1
+      if -d && m/^ (?: blib | third_party | pod2html | build | cover_db | nytprof | \..+ ) $/x;
   return unless -f;
 
   my $type;
