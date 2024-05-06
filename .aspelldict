@@ -1,4 +1,4 @@
-personal_ws-1.1 en 52 
+personal_ws-1.1 en 54 
 CPAN
 CPANfile
 Cygwin
@@ -31,8 +31,10 @@ dest
 devcontainer
 dirname
 distupload
+exe
 github
 gitignore
+html
 init
 json
 metacpan
