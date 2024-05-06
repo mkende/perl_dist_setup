@@ -101,6 +101,13 @@ exists following the syntax documented in the
 L<cpan-upload|https://metacpan.org/dist/CPAN-Uploader/view/bin/cpan-upload>
 manual provides these values.
 
+=item - pod2html
+
+Converts the POD documentation embedded in all the F<.pm> files under F<lib/>
+as well as in all the scripts specified by C<exe_files> in the
+F<dist_setup.conf> file into HTML. The output files are written in the
+F<pod2html> directory in the project folder.
+
 =item - rawcritic
 
 Execute your code through C<perlcritic> directly, without the violation grouping

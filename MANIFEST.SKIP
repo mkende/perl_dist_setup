@@ -24,6 +24,8 @@
 ^t/001-spelling.t
 ^third_party/
 ^pm_to_blib$
+^pod2htmd\.tmp$
+^pod2html/
 ^Dist-Setup-[\d.]+/
 ^Dist-Setup-[\d.]+\.tar\.gz
 .*\.bak
