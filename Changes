@@ -1,5 +1,10 @@
 Revision history for perl distribution Dist-Setup
 
+0.16 - ??
+
+ - Disable our custom make targets on platforms that are not know to have
+   GNU Make.
+
 0.15 - 2024-05-06
 
  - Fix a typo in the template dist_setup.conf file.
