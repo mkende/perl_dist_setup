@@ -92,7 +92,9 @@ spelling: export EXTENDED_TESTING = 1
 spelling:
 \t\$(PERLRUN) t/001-spelling.t --interactive
 
-alltest: export EXTENDED_TESTING = 1
+[% IF test_harness_options %]test: export HARNESS_OPTIONS = [% test_harness_options %]
+
+[% END %]alltest: export EXTENDED_TESTING = 1
 alltest: test
 
 clean:: clean_coverdb clean_build clean_pod2html
