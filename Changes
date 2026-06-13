@@ -1,6 +1,6 @@
 Revision history for perl distribution Dist-Setup
 
-0.17 - ??
+0.17 - 2026-06-13
 
  - Install the dependencies in the GitHub CI worflow in several steps to try to
    break dependency loops when --with-suggests is active (typically between
