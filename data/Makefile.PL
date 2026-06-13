@@ -74,7 +74,7 @@ ALL_EXE :=[% IF exe_files %][% FOREACH f IN exe_files %] [% f %][% END %][% END 
 
 distupload: distcheck disttest
 \t\$(MAKE) tardist
-\tcpan-upload --directory Dist-Setup \$(DISTVNAME).tar\$(SUFFIX)
+\tcpan-upload --directory \$(DISTNAME) \$(DISTVNAME).tar\$(SUFFIX)
 
 cover:
 \tcover -test

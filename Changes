@@ -9,6 +9,7 @@ Revision history for perl distribution Dist-Setup
  - Update the latest version to 5.42 and never run the oldest version on the
    Windows running in the CI.
  - Add the .claude/ dir to the standard MANIFEST.SKIP file.
+ - Upload the distributions in the correct dir and not in the Dist-Setup one.
 
 0.16 - 2024-05-09
 
