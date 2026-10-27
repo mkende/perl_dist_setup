@@ -3,6 +3,7 @@
 
 ^\.aspell\..*$
 ^\.aspelldict$
+^\.claude/
 ^\.devcontainer/
 ^\.git/
 ^\.gitignore$
@@ -13,6 +14,7 @@
 ^Makefile.old$
 ^MANIFEST\.bak$
 ^MANIFEST\.SKIP$
+^MYMETA\..*$
 ^README(\..*)?$
 ^blib/
 ^build/
