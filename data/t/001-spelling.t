@@ -11,7 +11,7 @@ use File::Find 'find';
 use File::Spec::Functions 'abs2rel';
 use FindBin;
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 BEGIN {
   if ($ENV{HARNESS_ACTIVE} && !$ENV{EXTENDED_TESTING}) {
@@ -56,12 +56,33 @@ if (not $aspell) {
   skip_all('The aspell program is required in the path to check the spelling.');
 }
 
+# Returns the list of the misspelled words of the given file, without
+# duplicates, in their order of appearance.
 sub list_bad_words {
   my ($file, $type) = @_;
   my $bad_words;
   my @cmd = (@base_cmd, @{$lang_filter{$type}}, 'list');
   run3(\@cmd, $file, \$bad_words) or die "Can’t run aspell: $!\n";
-  return $bad_words;
+  my %seen;
+  return grep { $_ ne '' && !$seen{$_}++ } split /\n/, $bad_words;
+}
+
+# Prints the given misspelled words of the given file, with the numbers of the
+# lines where they appear, so that they can be found and fixed (or added to
+# the .aspelldict file).
+sub diag_bad_words {
+  my ($file, $file_from_root, @words) = @_;
+  open my $fh, '<', $file or die "Can’t open ${file}: $!\n";
+  my @lines = <$fh>;
+  close $fh;
+  for my $w (@words) {
+    # Aspell splits words on anything that is not a letter (e.g. on '_').
+    my @numbers = grep { $lines[$_ - 1] =~ m/(?<![[:alpha:]])\Q${w}\E(?![[:alpha:]])/ } 1 .. @lines;
+    my $where = @numbers ? ' at line'.(@numbers > 1 ? 's ' : ' ').join(', ', @numbers) : q{};
+    diag("Unknown word '${w}' in ${file_from_root}${where}");
+  }
+  diag('Fix these words or add them to the .aspelldict file.');
+  return;
 }
 
 sub interactive_check {
@@ -92,7 +113,9 @@ sub wanted {
 
   my $file_from_root = abs2rel($File::Find::name, $root);
   if ($mode eq 'list') {
-    like(list_bad_words($_, $type), qr/^\s*$/, "Spell-checking ${file_from_root} (${type})");
+    my @bad_words = list_bad_words($_, $type);
+    ok(!@bad_words, "Spell-checking ${file_from_root} (${type})")
+        or diag_bad_words($_, $file_from_root, @bad_words);
   } elsif ($mode eq 'interactive') {
     is(interactive_check($_, $type),
       0, "Interactive spell-checking for ${file_from_root} (${type})");
