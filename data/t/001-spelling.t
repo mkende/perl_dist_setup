@@ -96,10 +96,12 @@ sub interactive_check {
 # Note: while strings in Perl modules are checked, the POD content is ignored
 # unfortunately.
 
+# The directories that are not spell-checked, in addition to the hidden ones.
+my %skipped_dirs = map { $_ => 1 } qw(blib third_party pod2html build cover_db nytprof local);
+
 sub wanted {
   # We should do something more generic to not recurse in Git sub-modules.
-  $File::Find::prune = 1
-      if -d && m/^ (?: blib | third_party | pod2html | build | cover_db | nytprof | \..+ ) $/x;
+  $File::Find::prune = 1 if -d && ($skipped_dirs{$_} || m/^ [.] . /x);
   return unless -f;
 
   my $type;

@@ -10,6 +10,9 @@ Revision history for perl distribution Dist-Setup
  - Install the modules without the verbose output of cpanm in the GitHub CI
    workflow, and print the cpanm build logs only when that installation fails,
    so that they don't hide the output of the failing tests.
+ - Cache the modules installed in the GitHub CI workflow, in the `local`
+   directory that is restored and saved by the actions-setup-perl action, and
+   don't spell-check that directory.
 
 0.18 - 2026-10-27
 
