@@ -67,7 +67,7 @@ sub list_bad_words {
   my @cmd = (@base_cmd, @{$lang_filter{$type}}, 'list');
   run3(\@cmd, $file, \$bad_words) or die "Can’t run aspell: $!\n";
   my %seen;
-  return grep { $_ ne '' && !$seen{$_}++ } split /\n/, $bad_words;
+  return grep { length && !$seen{$_}++ } split /\n/, $bad_words;
 }
 
 # Prints the given misspelled words of the given file, with the numbers of the
@@ -77,11 +77,13 @@ sub diag_bad_words {
   my ($file, $file_from_root, @words) = @_;
   open my $fh, '<', $file or die "Can’t open ${file}: $!\n";
   my @lines = <$fh>;
-  close $fh;
+  close $fh or die "Can’t close ${file}: $!\n";
   for my $w (@words) {
     # Aspell splits words on anything that is not a letter (e.g. on '_').
-    my @numbers = grep { $lines[$_ - 1] =~ m/(?<![[:alpha:]])\Q${w}\E(?![[:alpha:]])/ } 1 .. @lines;
-    my $where = @numbers ? ' at line'.(@numbers > 1 ? 's ' : ' ').join(', ', @numbers) : q{};
+    my @numbers =
+        grep { $lines[$_ - 1] =~ m/(?<![[:alpha:]]) \Q${w}\E (?![[:alpha:]])/x } 1 .. @lines;
+    my $where = q{};
+    $where = sprintf ' at line%s %s', (@numbers > 1 ? 's' : q{}), join(', ', @numbers) if @numbers;
     diag("Unknown word '${w}' in ${file_from_root}${where}");
   }
   diag('Fix these words or add them to the .aspelldict file.');
