@@ -1,0 +1,177 @@
+# DO NOT EDIT! This file is written by perl_setup_dist.
+# If needed, you can add content at the end of the file.
+
+name: Perl Tests
+
+on:
+  push:
+    branches-ignore:
+      - 'exp-**'
+      - 'exp/**'
+  pull_request:
+    branches-ignore:
+      - 'exp-**'
+      - 'exp/**'
+
+jobs:
+  # A pull request from a branch of this repository is already tested by the
+  # push event of that branch. So, the pull_request event is skipped when it
+  # would test the exact same content, that is when the branch is up to date
+  # with the base branch of the pull request (their merge is then the branch
+  # itself). Otherwise, the pull_request event tests the merged content.
+  dedupe:
+    runs-on: ubuntu-latest
+    name: Check for duplicate runs
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+    - name: Compare the branch with its base
+      id: check
+      if: >-
+        github.event_name == 'pull_request'
+        && github.event.pull_request.head.repo.full_name == github.repository
+        && !startsWith(github.head_ref, 'exp-')
+        && !startsWith(github.head_ref, 'exp/')
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        behind=$(gh api "repos/${{ github.repository }}/compare/${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" --jq .behind_by)
+        echo "The branch is ${behind} commit(s) behind its base."
+        if [ "${behind}" = 0 ]; then
+          echo "skip=true" >> "${GITHUB_OUTPUT}"
+        fi
+
+  test:
+    needs: dedupe
+    if: ${{ needs.dedupe.outputs.skip != 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu, ]
+        perl: [ '5.26', '5.42' ]
+        exclude:
+          # MacOS runners are very expensive, so let’s run only on the latest Perl
+          - os: macos
+            perl: '5.26'
+
+          # Old Windows Perl are often missing features (TLS stack) which cause
+          # issues in the CI.
+          - os: windows
+            perl: '5.26'
+
+        # From time to time, Strawberry Perl does not have the latest Perl
+        # version. So these lines can be uncommented to remove it (and replace
+        # it with another version in the include section below).
+        # Currently Strawberry Perl has 5.38
+        #   - os: windows
+        #     perl: '5.38'
+        # include:
+        #   - os: windows
+        #     perl: '5.32'
+
+    runs-on: ${{matrix.os}}-latest
+    name: Perl ${{matrix.perl}} ${{matrix.os}}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # This action restores the modules installed in the `local` directory by a
+    # previous run (from a cache keyed on the Perl version and on the cpanfile),
+    # adds that directory to PERL5LIB and PATH and saves it at the end of the
+    # job.
+    - name: Set up perl
+      uses: shogo82148/actions-setup-perl@v1
+      with:
+          perl-version: ${{ matrix.perl }}
+          distribution: ${{ ( matrix.os == 'windows'  && 'strawberry' ) || 'default' }}
+
+    - name: Show Perl Version
+      run: |
+        perl -v
+
+    - name: Install aspell
+      if:  ${{ matrix.os == 'ubuntu' }}
+      run: |
+        sudo apt-get install aspell
+
+    - name: Install Modules
+      id: install_modules
+      if:  ${{ matrix.os != 'macos' }}
+      # install the dependencies in 3 steps to limit the risk of dependency loops.
+      # The build logs are printed only if the installation fails (see below).
+      # The modules are installed in the cached `local` directory (see above).
+      run: |
+        cpanm -V
+        cpanm -L local --installdeps --notest --with-configure --with-all-features .
+        cpanm -L local --installdeps --notest --with-recommends --with-all-features .
+        cpanm -L local --installdeps --notest --with-suggests --with-all-features .
+
+    # MacOS runners are very costly, so let’s install the minimum amount of
+    # dependency.
+    - name: Install Modules on MacOS
+      id: install_modules_macos
+      if:  ${{ matrix.os == 'macos' }}
+      run: |
+        cpanm -V
+        cpanm -L local --installdeps --notest --with-configure --without-recommends --without-suggests .
+
+    - name: Run tests on Linux
+      if:  ${{ matrix.os == 'ubuntu' }}
+      env:
+        AUTOMATED_TESTING: 1
+        NONINTERACTIVE_TESTING: 1
+        EXTENDED_TESTING: 1
+        RELEASE_TESTING: 1
+      run: |
+        perl Makefile.PL
+        make
+        make test
+
+    # MacOS runners are very costly, so let’s not run the EXTENDED_TESTING
+    # tests, to save some cost.
+    - name: Run tests on MacOS
+      if:  ${{ matrix.os == 'macos' }}
+      env:
+        AUTOMATED_TESTING: 1
+        NONINTERACTIVE_TESTING: 1
+        RELEASE_TESTING: 1
+      run: |
+        perl Makefile.PL
+        make
+        make test  
+
+    # On Windows there is no 'make' command. It seems that Makefile.PL defaults
+    # to using 'dmake' which is maybe installed on the GitHub VMs. However we
+    # know that there is a 'gmake' included with Strawberry Perl, so let’s use
+    # that one.
+    - name: Run tests on Windows
+      if:  ${{ matrix.os == 'windows' }}
+      env:
+        AUTOMATED_TESTING: 1
+        NONINTERACTIVE_TESTING: 1
+        RELEASE_TESTING: 1
+      run: |
+        perl Makefile.PL MAKE=gmake
+        gmake
+        gmake test
+
+    # The build logs of cpanm are only useful when the installation of the
+    # modules failed (otherwise, they would hide the output of the tests).
+    - name: Show Errors on Linux
+      if:  ${{ failure() && steps.install_modules.outcome == 'failure' && matrix.os == 'ubuntu' }}
+      run: |
+         cat /home/runner/.cpanm/work/*/build.log
+
+    - name: Show Errors on Windows
+      if:  ${{ failure() && steps.install_modules.outcome == 'failure' && matrix.os == 'windows' }}
+      run: |
+         ls -l C:/Users/
+         ls -l C:/Users/RUNNER~1/
+         cat C:/Users/runneradmin/.cpanm/work/*/build.log
+
+    - name: Show Errors on MacOS
+      if:  ${{ failure() && steps.install_modules_macos.outcome == 'failure' && matrix.os == 'macos' }}
+      run: |
+         cat  /Users/runner/.cpanm/work/*/build.log
+
+# End of the template. You can add custom content below this line.
