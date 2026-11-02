@@ -95,7 +95,9 @@ and display the policy violations.
 
 =item - distupload
 
-Test and then upload the distribution to CPAN. You will be queried on the
+Test and then upload the distribution to CPAN. The upload is aborted if the
+tests fail or if the F<MANIFEST> file does not match the files of the
+distribution (see C<strictdistcheck>). You will be queried on the
 command line for your PAUSE username and password, unless a F<~/.pause> file
 exists following the syntax documented in the
 L<cpan-upload|https://metacpan.org/dist/CPAN-Uploader/view/bin/cpan-upload>
@@ -127,6 +129,11 @@ done by the L<Test2::Tools::PerlCritic> module as when running C<make critic>.
 Run C<aspell> interactively to spell-check the distribution. For each misspelled
 word, you can either fix their spelling, or add them to a local F<.aspelldict>
 dictionary file, which should be stored in your source version control system.
+
+=item - strictdistcheck
+
+Like the standard C<distcheck> target, print the differences between the
+F<MANIFEST> file and the files of the distribution, but fail if there are any.
 
 =item - tidy
 
