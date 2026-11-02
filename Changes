@@ -13,6 +13,8 @@ Revision history for perl distribution Dist-Setup
  - Cache the modules installed in the GitHub CI workflow, in the `local`
    directory that is restored and saved by the actions-setup-perl action, and
    don't spell-check that directory.
+ - Also exclude a .git file (as found in a Git worktree) from the
+   distribution, not only a .git directory.
 
 0.18 - 2026-10-27
 
