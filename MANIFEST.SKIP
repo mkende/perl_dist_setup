@@ -6,6 +6,7 @@
 ^\.claude/
 ^\.devcontainer/
 ^\.git/
+^\.github/
 ^\.gitignore$
 ^\.gitmodules$
 ^\.perlcriticrc$
